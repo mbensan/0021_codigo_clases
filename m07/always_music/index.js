@@ -45,6 +45,23 @@ async function consultar_estudiantes () {
   console.log(rows)
 }
 
+async function editar_estudiante(nombre, rut, curso, nivel) {
+  // 1. Solicitamos un cliente al pool
+  const client = await pool.connect() 
+  
+  // 2. Ejecutamos la consulta
+  const {rows} = await client.query(
+    'update alumnos set nombre=$1, curso=$2, nivel=$3 where rut=$4',
+    [nombre, curso, parseInt(nivel), rut]
+  )
+  
+  // 3. Devolvemos el cliente al pool
+  client.release()
+  
+  // 4. Mostramos el resultado en consola
+  console.log(`El registro de ${nombre} ha sido editado con éxito`)
+}
+
 function init () {
   const palabras = process.argv
   const accion = palabras[2]
@@ -54,11 +71,19 @@ function init () {
     const rut = palabras[4]
     const curso = palabras[5]
     const nivel = palabras[6]
-
+    
     crear_estudiante(nombre, rut, curso, nivel)
   }
   else if (accion == 'consulta') {
     consultar_estudiantes()
+  }
+  else if (accion == 'editar') {
+    const nombre = palabras[3]
+    const rut = palabras[4]
+    const curso = palabras[5]
+    const nivel = palabras[6]
+    
+    editar_estudiante(nombre, rut, curso, nivel)
   }
 
   else {
