@@ -14,7 +14,35 @@ async function crear_estudiante (nombre, rut, curso, nivel) {
   // 1. Solicitar un cliente al pool de conecciones
   const client = await pool.connect()
 
-  const query = `insert into alumnos (rut, nombre, curso, nivel) values ('${rut}', '${nombre}', '${curso}', ${parseInt(nivel)})`
+  // 2. Ejecutar la consulta
+  try {
+    await client.query(
+      'insert into alumnos (rut, nombre, curso, nivel) values ($1, $2, $3, $4)',
+      [rut, nombre, curso, parseInt(nivel)]
+    )
+  }
+  catch (error) {
+    console.log("Error de consulta PG", error)
+  }
+
+  // 3. Devolvemos el cliente al pool
+  client.release()
+
+  console.log(`Se ha creado el alumno ${nombre}`)
+}
+
+async function consultar_estudiantes () {
+  // 1. Solicitamos un cliente al pool
+  const client = await pool.connect() 
+
+  // 2. Ejecutamos la consulta
+  const {rows} = await client.query('select * from alumnos')
+  
+  // 3. Devolvemos el cliente al pool
+  client.release()
+  
+  // 4. Mostramos el resultado en consola
+  console.log(rows)
 }
 
 function init () {
@@ -28,6 +56,9 @@ function init () {
     const nivel = palabras[6]
 
     crear_estudiante(nombre, rut, curso, nivel)
+  }
+  else if (accion == 'consulta') {
+    consultar_estudiantes()
   }
 
   else {
