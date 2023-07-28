@@ -15,7 +15,7 @@ async function init () {
   await client.query(`
     create table if not exists cuentas (
       id serial primary key,
-      saldo integer not null default 0
+      saldo integer not null default 0 check > 0
     )
   `)
   
