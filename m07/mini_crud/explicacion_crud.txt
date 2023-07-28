@@ -1,0 +1,11 @@
+create -> POST
+read -> GET
+update -> PUT
+delete -> DELETE
+
+Cuentas
+GET  /cuentas
+GET  /cuentas/7
+POST /cuentas
+PUT /cuentas
+DELETE /cuentas
