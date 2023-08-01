@@ -23,4 +23,37 @@ router.post('/ejercicios', async (req, res) => {
   res.json({rows: []})
 })
 
+
+router.put('/ejercicios', async (req, res) => {
+  console.log(req.body)
+  const {nombre, series, repeticiones, descanso} = req.body
+ 
+  await Ejercicio.update(
+    // nuevos valores
+    {
+      series, repeticiones, descanso
+    },
+    // condicion
+    {
+      where: {
+        nombre: nombre
+      }
+    }
+  )
+
+  res.json({todo: 'ok'})
+})
+
+router.delete('/ejercicios', async (req, res) => {
+  const nombre = req.query.nombre
+
+  await Ejercicio.destroy({
+    where: {
+      nombre
+    }
+  })
+
+  return res.json({todo: 'ok'})
+})
+
 module.exports = router
