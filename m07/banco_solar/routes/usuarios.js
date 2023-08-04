@@ -18,11 +18,15 @@ router.post('/usuario', async (req, res) => {
   req.on('end', async () => {
     body = JSON.parse(body)
     // Recién acá, podemos acceder a los datos del nombre y el balance
-    console.log(body);
-    await Usuario.create({
-      nombre: body.nombre,
-      balance: body.balance
-    })
+    try {
+      await Usuario.create({
+        nombre: body.nombre,
+        balance: body.balance
+      })
+    }
+    catch(err) {
+      console.log(err.errors[0].message);
+    }
     res.json({})
   })
 })
