@@ -9,14 +9,25 @@ const Articulo = db.define('Articulo', {
     validate: {
       len: {
         args: [2, 45],
-        msg: 'El nombre no puede ser de largo menor a 2'
+        msg: 'El largo del nombre debe medir entre 2 y 45 caracteres'
       }
     }
   },
   precio: {
     type: dt.INTEGER,
     allowNull: false,
-    defaultValue: 0
+    defaultValue: 0,
+    validate: {
+      min: {
+        args: [1],
+        msg: 'El valor del precio no puede ser menor a 1'
+      },
+      max: {
+        args: [1000000],
+        msg: 'El valor del precio no puede ser mayor a 1 millón'
+      }
+      
+    }
   }
 }, {timestamps: true})
 
