@@ -73,11 +73,28 @@ router.post('/', async function(req, res) {
   }
 
   // 2. Validación con Sequelize
+  let articulo;
   try {
-    await Articulo.create({nombre,precio})
+    articulo = await Articulo.create({nombre, precio})
   }
   catch(error) {
-    return res.json(400, error)
+    return res.status(400).json(error)
+  }
+  console.log('nuevo_id\n\n', articulo.id)
+  // 2. Se almacena la imagen (sólo si existe)
+  if (req.files && req.files.foto) {
+    const foto = req.files.foto
+
+    // 3. Obtenemos la extensión de la foto (por ej. "png")
+    const arr = foto.name.split('.')
+    const ext = arr[arr.length - 1]
+
+    // 4.  guardamos la foto en la carpeta "./public/fotos"
+    await foto.mv(`./public/fotos/${articulo.id}.${ext}`)
+
+    // 5. Guardamos en la base de datos que ese artículo SI tiene fotos
+    articulo.foto = `${articulo.id}.${ext}`
+    await articulo.save()
   }
 
   res.json({});

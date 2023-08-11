@@ -1,0 +1,3 @@
+- Visualizar los articulos creados
+- Capturar errores en el Frontend
+- Validar las extesiones y tamaño de los archivos

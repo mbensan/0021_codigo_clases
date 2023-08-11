@@ -13,7 +13,7 @@
   </div>
   <div>
     <label for="nombre">Foto:</label>
-    <input type="file" required id="foto">
+    <input type="file" id="foto">
   </div>
   <input type="submit" value="Enviar">
 </form>
@@ -35,7 +35,7 @@
     datos.append('foto', foto.files[0])
 
     const resp = await axios.post(
-      '/api/articulos/foto',
+      '/api/articulos',
       datos,
       {
         headers: {

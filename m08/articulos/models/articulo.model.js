@@ -28,7 +28,10 @@ const Articulo = db.define('Articulo', {
       }
       
     }
-  }
+  },
+  foto: {
+    type: dt.STRING,
+  },
 }, {timestamps: true})
 
 
