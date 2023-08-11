@@ -1,2 +1,49 @@
 <h1>{{title}}</h1>
 <p>Welcome to {{title}} mati</p>
+
+<!-- El atributo enctype me permite mandar archivos -->
+<form action="/" id="form-articulo" enctype="multipart/form-data">
+  <div>
+    <label for="nombre">Nombre:</label>
+    <input type="text" required id="nombre"> 
+  </div>
+  <div>
+    <label for="nombre">Precio:</label>
+    <input type="number" required min="1" id="precio">
+  </div>
+  <div>
+    <label for="nombre">Foto:</label>
+    <input type="file" required id="foto">
+  </div>
+  <input type="submit" value="Enviar">
+</form>
+
+<script>
+  const form = document.querySelector('#form-articulo')
+
+  const nombre = document.querySelector('#nombre')
+  const precio = document.querySelector('#precio')
+  const foto = document.querySelector('#foto')
+
+  form.addEventListener('submit', async function (ev) {
+    ev.preventDefault()
+
+    const datos = new FormData()
+
+    datos.append('nombre', nombre.value)
+    datos.append('precio', precio.value)
+    datos.append('foto', foto.files[0])
+
+    const resp = await axios.post(
+      '/api/articulos/foto',
+      datos,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }
+    )
+
+    console.log(resp)
+  })
+</script>

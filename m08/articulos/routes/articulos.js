@@ -96,4 +96,14 @@ router.delete('/:id(\\d+)/', async function (req, res) {
   res.json({})
 })
 
+router.post('/foto', async (req, res) => {
+  console.log(req.body)
+  console.log(req.files.foto)
+
+  const foto = req.files.foto
+  await foto.mv('./public/fotos/' + foto.name)
+
+  res.send('Todo ok')
+})
+
 module.exports = router;
