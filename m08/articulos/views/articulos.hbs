@@ -87,15 +87,33 @@
     datos.append('precio', precio.value)
     datos.append('foto', foto.files[0])
 
-    const resp = await axios.post(
-      '/api/articulos', datos,
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data'
+    try {
+      const resp = await axios.post(
+        '/api/articulos', datos,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
         }
+      )
+      console.log(resp)
+    }
+    catch (err) {
+      console.log(err)
+      // Obtenemos los errores validados por nosotros
+      const mensaje1 = err.response.data.err
+      if (mensaje1) {
+        Swal.fire(mensaje1)
       }
-    )
 
-    console.log(resp)
+      // Obtenemos los errores de sequelize
+      const errors = err.response.data.errors
+      // creamos un string largo
+      const mensaje2 = errors.map(e => e.message).join('. ')
+      if (mensaje2) {
+        Swal.fire(mensaje2)
+      }
+    }
+
   })
 </script>
