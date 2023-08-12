@@ -6,11 +6,11 @@
     <form action="/" id="form-articulo" enctype="multipart/form-data">
       <div>
         <label for="nombre">Nombre:</label>
-        <input type="text" required id="nombre"> 
+        <input type="text" id="nombre"> 
       </div>
       <div>
         <label for="nombre">Precio:</label>
-        <input type="number" required min="1" id="precio">
+        <input type="number" id="precio">
       </div>
       <div>
         <label for="nombre">Foto:</label>
@@ -88,8 +88,7 @@
     datos.append('foto', foto.files[0])
 
     const resp = await axios.post(
-      '/api/articulos',
-      datos,
+      '/api/articulos', datos,
       {
         headers: {
           'Content-Type': 'multipart/form-data'

@@ -72,6 +72,25 @@ router.post('/', async function(req, res) {
     })
   }
 
+  // 1.5 Validamos el archivo de la foto
+  if (req.files && req.files.foto) {
+    const foto = req.files.foto
+
+    if (foto.size > (2048*1024)) {
+      return res.status(400).json({
+        err: 'El tamaño máximo para la foto es de 4Mb'
+      })
+    }
+
+    const extensiones_permitidas = ['image/png', 'image/jpeg', 'image/gif']
+    if (extensiones_permitidas.indexOf(foto.mimetype) < 0){
+      return res.status(400).json({
+        err: 'Ese formato de imagen no está permitido'
+      })
+    }
+    
+  }
+
   // 2. Validación con Sequelize
   let articulo;
   try {
@@ -119,6 +138,7 @@ router.post('/foto', async (req, res) => {
   console.log(req.files.foto)
 
   const foto = req.files.foto
+  console.log(foto)
   await foto.mv('./public/fotos/' + foto.name)
 
   res.send('Todo ok')
