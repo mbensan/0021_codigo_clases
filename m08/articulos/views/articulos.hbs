@@ -1,0 +1,102 @@
+<h3 class="text-primary text-center">Artículos</h3>
+
+<div class="row">
+  <div class="col">
+    <!-- El atributo enctype me permite mandar archivos -->
+    <form action="/" id="form-articulo" enctype="multipart/form-data">
+      <div>
+        <label for="nombre">Nombre:</label>
+        <input type="text" required id="nombre"> 
+      </div>
+      <div>
+        <label for="nombre">Precio:</label>
+        <input type="number" required min="1" id="precio">
+      </div>
+      <div>
+        <label for="nombre">Foto:</label>
+        <input type="file" id="foto">
+      </div>
+      <input type="submit" value="Enviar">
+    </form>
+  </div>
+  <div class="col">
+    <h4>Lista de artículos</h4>
+    <div class="row" id="lista-articulos">
+      <div class="col-4">
+        <div class="card">
+          <img src="/fotos/default.jpg" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title">Nombre Articulo</h5>
+            <p class="card-text">$1352</p>
+            <a href="#" class="btn btn-primary">Edit</a>
+            <a href="#" class="btn btn-danger">Delete</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script defer>
+  const form = document.querySelector('#form-articulo')
+
+  const nombre = document.querySelector('#nombre')
+  const precio = document.querySelector('#precio')
+  const foto = document.querySelector('#foto')
+  const lista_articulos = document.querySelector('#lista-articulos')
+
+  async function cargar_lista () {
+    const {data} = await axios.get('/api/articulos')
+    
+    let articulos_str = ''
+    for (let articulo of data) {
+      let img;
+      if (articulo.foto) {
+        img = '/fotos/' + articulo.foto
+      }
+      else {
+        img = '/fotos/default.jpg'
+      }
+
+      articulos_str += `
+      <div class="col-4">
+        <div class="card">
+          <img src="${img}" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title">${articulo.nombre}</h5>
+            <p class="card-text">$${articulo.precio}</p>
+            <a href="#" class="btn btn-primary">Edit</a>
+            <a href="#" class="btn btn-danger">Delete</a>
+          </div>
+        </div>
+      </div>
+      `
+    }
+
+    lista_articulos.innerHTML = articulos_str
+    console.log(data)
+  }
+  cargar_lista()
+
+  form.addEventListener('submit', async function (ev) {
+    ev.preventDefault()
+
+    const datos = new FormData()
+
+    datos.append('nombre', nombre.value)
+    datos.append('precio', precio.value)
+    datos.append('foto', foto.files[0])
+
+    const resp = await axios.post(
+      '/api/articulos',
+      datos,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }
+    )
+
+    console.log(resp)
+  })
+</script>

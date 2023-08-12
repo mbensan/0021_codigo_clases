@@ -80,7 +80,8 @@ router.post('/', async function(req, res) {
   catch(error) {
     return res.status(400).json(error)
   }
-  console.log('nuevo_id\n\n', articulo.id)
+  //console.log('nuevo_id\n\n', articulo.id)
+  
   // 2. Se almacena la imagen (sólo si existe)
   if (req.files && req.files.foto) {
     const foto = req.files.foto
