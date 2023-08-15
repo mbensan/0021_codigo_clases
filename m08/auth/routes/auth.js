@@ -61,8 +61,29 @@ router.post('/read', function (req, res) {
 router.get('/my', (req, res) => {
   // quiero que esta ruta sólo sea para usuarios logueados
   // Si puedo abrir el token, entonces asumimos que el usuario SI está logueado
-  
-  res.status(401).json({err: 'No tiene permiso para entrar'})
+  // 1. Verificamos que tenga un token válido
+  const {authorization} = req.headers
+
+  let decoded;
+  try {
+    decoded = jwt.verify(authorization, llave_secreta)
+  }
+  catch(error) {
+    return res.status(400).json(error)
+  }
+  // 2. Verificamos que el token aún no ah expirado
+  const now = (new Date() / 1000)
+  if (now > decoded.exp) {
+    return res.status(401).json({
+      err: 'Tu token expiró'
+    })
+  }
+  // 3. Si todo está ok, devolvemos el dinero
+  res.json({
+    nombre: decoded.data.nombre,
+    dinero: '$230060'
+  })
 })
+
 
 module.exports = router;
