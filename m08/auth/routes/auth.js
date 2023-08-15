@@ -1,8 +1,8 @@
 const express = require('express');
 const jwt = require('jsonwebtoken')
 const router = express.Router();
+const {auth_required, llave_secreta} = require('../middlewares.js')
 
-const llave_secreta = 'topsecret'
 
 const users = [
   {id: 1, nombre: 'Carlos Salvo', email: 'csalvo@gmail.com', pass: 'abc123'},
@@ -58,29 +58,16 @@ router.post('/read', function (req, res) {
   res.json(decoded)
 })
 
-router.get('/my', (req, res) => {
-  // quiero que esta ruta sólo sea para usuarios logueados
-  // Si puedo abrir el token, entonces asumimos que el usuario SI está logueado
-  // 1. Verificamos que tenga un token válido
-  const {authorization} = req.headers
+// Ruta que está protegida por nuestro middleware llamado "auth_required"
+router.get('/my', auth_required, (req, res) => {
 
-  let decoded;
-  try {
-    decoded = jwt.verify(authorization, llave_secreta)
-  }
-  catch(error) {
-    return res.status(400).json(error)
-  }
-  // 2. Verificamos que el token aún no ah expirado
-  const now = (new Date() / 1000)
-  if (now > decoded.exp) {
-    return res.status(401).json({
-      err: 'Tu token expiró'
-    })
-  }
+  // Info que viene desde el middleware
+  const data = req.data
+  console.log(data)
+  
   // 3. Si todo está ok, devolvemos el dinero
   res.json({
-    nombre: decoded.data.nombre,
+    nombre: data.nombre,
     dinero: '$230060'
   })
 })
