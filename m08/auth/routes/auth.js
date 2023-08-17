@@ -125,10 +125,7 @@ router.get('/my', auth_required, (req, res) => {
   console.log(data)
   
   // 3. Si todo está ok, devolvemos el dinero
-  res.json({
-    nombre: data.nombre,
-    dinero: '$230060'
-  })
+  res.json(data)
 })
 
 
