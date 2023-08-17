@@ -11,13 +11,13 @@ function auth_required (req, res, next) {
   
   let decoded;
   try {
-    decoded = jwt.verify(authorization, llave_secreta)
+    decoded = jwt.verify(authorization, process.env.SECRET_KEY)
   }
   catch(error) {
     console.log('error en la decodificacion', error)
     return res.status(400).json(error)
   }
-  // 2. Verificamos que el token aún no ah expirado
+  // 2. Verificamos que el token aún no ha expirado
   const now = (new Date() / 1000)
   if (now > decoded.exp) {
     console.log({now}, {exp: decoded.exp})
