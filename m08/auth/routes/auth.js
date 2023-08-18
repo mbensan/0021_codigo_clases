@@ -68,7 +68,7 @@ router.post('/signup', async function(req, res, next) {
     }) 
   }
 
-  // 4. Verficamos si ese "email" existe en la base de datos
+  // 4. Verficamos si ese "email" no exista en la base de datos
   const oldUser = await User.findOne({where: {email}})
   if (oldUser) {
     return res.status(400).json({

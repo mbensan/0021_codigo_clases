@@ -4,7 +4,11 @@
 
 <div class="row">
   <div class="col-4 offset-4">
-    <form id="form-login">
+    <form id="form-signup">
+      <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">Nombre</label>
+        <input type="text" class="form-control" id="nombre" aria-describedby="emailHelp" required>
+      </div>
       <div class="mb-3">
         <label for="exampleInputEmail1" class="form-label">Email address</label>
         <input type="email" class="form-control" id="email" aria-describedby="emailHelp" required>
@@ -14,6 +18,10 @@
         <label for="exampleInputPassword1" class="form-label">Password</label>
         <input required type="password" class="form-control" id="password">
       </div>
+      <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">Confirmar Password</label>
+        <input required type="password" class="form-control" id="pass_confirm">
+      </div>
       <button type="submit" class="btn btn-primary">Entrar</button>
     </form>
   </div>
@@ -21,9 +29,11 @@
 
 <script>
   // 1.Obtener las variables
-  const form = document.querySelector('#form-login')
+  const form = document.querySelector('#form-signup')
+  const nombre = document.querySelector('#nombre')
   const email = document.querySelector('#email')
   const password = document.querySelector('#password')
+  const pass_confirm = document.querySelector('#pass_confirm')
 
   // 2. Reaccionar al envio del formulario
   form.addEventListener('submit', async function (ev) {
@@ -33,9 +43,11 @@
     // 2. Mandamos la solicitud al servidor
     let response;
     try {
-      response = await axios.post('/api/auth/login', {
+      response = await axios.post('/api/auth/signup', {
+        nombre: nombre.value,
         email: email.value,
-        password: password.value
+        password: password.value,
+        pass_confirm: pass_confirm.value
       })
     }
     catch(error) {

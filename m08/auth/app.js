@@ -4,6 +4,8 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const dotenv = require('dotenv')
+const exphbs = require('express-handlebars')
+const {engine} = require('express-handlebars')
 
 dotenv.config()
 
@@ -14,8 +16,14 @@ var authRouter = require('./routes/auth');
 var app = express();
 
 // view engine setup
+const handlebars = exphbs.create({
+  layoutsDir: path.join(__dirname, 'views'),
+  partialsDir: path.join(__dirname, 'views/partials')
+});
+app.engine(".hbs", engine({extname: '.hbs'}));
+app.set("view engine", "hbs");
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'hbs');
+
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -25,6 +33,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'node_modules/bootstrap/dist')));
 app.use(express.static(path.join(__dirname, 'node_modules/axios/dist')));
+app.use(express.static(path.join(__dirname, 'node_modules/toastr/build')));
+app.use(express.static(path.join(__dirname, 'node_modules/jquery/dist')));
 
 
 app.use('/', indexRouter);
